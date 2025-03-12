@@ -3,6 +3,7 @@ using System;
 using EShop.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EShop.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304135000_Add_ProfileImageUrl_column")]
+    partial class Add_ProfileImageUrl_column
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +42,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("Id", "UserId")
                         .IsUnique();
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("EShop.Entities.CartProduct", b =>
@@ -64,7 +67,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("ProductId", "CartId")
                         .IsUnique();
 
-                    b.ToTable("CartProduct", (string)null);
+                    b.ToTable("CartProduct");
                 });
 
             modelBuilder.Entity("EShop.Entities.Category", b =>
@@ -80,7 +83,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("EShop.Entities.Favorite", b =>
@@ -102,7 +105,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("UserId", "ProductId")
                         .IsUnique();
 
-                    b.ToTable("Favorites", (string)null);
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("EShop.Entities.Product", b =>
@@ -157,7 +160,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("EShop.Entities.ProductImage", b =>
@@ -177,7 +180,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage", (string)null);
+                    b.ToTable("ProductImage");
                 });
 
             modelBuilder.Entity("EShop.Entities.ProductReview", b =>
@@ -209,43 +212,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("UserId", "ProductId")
                         .IsUnique();
 
-                    b.ToTable("ProductReview", (string)null);
-                });
-
-            modelBuilder.Entity("EShop.Entities.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedByIp")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("RevokedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("RevokedByIp")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("ProductReview");
                 });
 
             modelBuilder.Entity("EShop.Entities.Role", b =>
@@ -257,12 +224,6 @@ namespace EShop.Persistence.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -279,35 +240,6 @@ namespace EShop.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8"),
-                            ConcurrencyStamp = "CC0B5346-F8AD-4580-8B6C-E88F70D2A493",
-                            IsDefault = false,
-                            IsDeleted = false,
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("01957b56-0791-7fb2-846a-d59ed8104780"),
-                            ConcurrencyStamp = "9ADD3A9D-00D3-42DF-83FD-E8FAA10CA3DD",
-                            IsDefault = true,
-                            IsDeleted = false,
-                            Name = "Client",
-                            NormalizedName = "CLIENT"
-                        },
-                        new
-                        {
-                            Id = new Guid("01957b56-0791-7fb2-846a-d59f359f3426"),
-                            ConcurrencyStamp = "76CE33FE-E990-4DF4-A4B0-712609EE0A62",
-                            IsDefault = false,
-                            IsDeleted = false,
-                            Name = "Seller",
-                            NormalizedName = "SELLER"
-                        });
                 });
 
             modelBuilder.Entity("EShop.Entities.SoldProduct", b =>
@@ -342,7 +274,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SoldProducts", (string)null);
+                    b.ToTable("SoldProducts");
                 });
 
             modelBuilder.Entity("EShop.Entities.SubCategory", b =>
@@ -363,7 +295,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategories", (string)null);
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("EShop.Entities.User", b =>
@@ -439,65 +371,6 @@ namespace EShop.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("01957b40-a60a-7413-ae16-6c4727049ca9"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "283AEB14-CE9F-4AE0-88F9-4C86FCEFA221",
-                            CreatedAt = new DateTime(2025, 3, 9, 21, 38, 54, 579, DateTimeKind.Utc).AddTicks(1943),
-                            Email = "admin@eshop.com",
-                            EmailConfirmed = true,
-                            IsDisabled = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ESHOP.COM",
-                            NormalizedUserName = "ADMIN_NAME",
-                            PasswordHash = "AQAAAAIAAYagAAAAECmR5YUNa+8lm4NNTA5ONhy0jRto2LT7XAmS+CBwFwJ4Z6F5+4erVz4AVQ0ZLuC/fg==",
-                            PhoneNumberConfirmed = false,
-                            ProfileImageUrl = "",
-                            SecurityStamp = "96ADA591-B04C-4D37-B57B-9FCBA8262C5B",
-                            TwoFactorEnabled = false,
-                            UserName = "Admin_Name"
-                        },
-                        new
-                        {
-                            Id = new Guid("01957b40-a60b-780d-b328-f9bf9c4aa691"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "303BE4AC-8A47-4B2F-91F2-2BB1B459470D",
-                            CreatedAt = new DateTime(2025, 3, 9, 21, 38, 54, 580, DateTimeKind.Utc).AddTicks(3798),
-                            Email = "client@test.com",
-                            EmailConfirmed = true,
-                            IsDisabled = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "CLIENT@TEST.COM",
-                            NormalizedUserName = "CLIENT_NAME",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMie4u7ffTRAMN7ZbSrikIwbANJmNMC/1n4oBXgFcrSo32sL0xcUG75XenUMNGFCig==",
-                            PhoneNumberConfirmed = false,
-                            ProfileImageUrl = "",
-                            SecurityStamp = "19439CAF-856D-46A7-9903-6141810F446B",
-                            TwoFactorEnabled = false,
-                            UserName = "Client_Name"
-                        },
-                        new
-                        {
-                            Id = new Guid("01957b40-a60b-780d-b328-f9c0cd4b0d85"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1238F62D-0C73-4298-B0B5-F85FDFE9CDBB",
-                            CreatedAt = new DateTime(2025, 3, 9, 21, 38, 54, 580, DateTimeKind.Utc).AddTicks(3848),
-                            Email = "seller@test.com",
-                            EmailConfirmed = true,
-                            IsDisabled = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "SELLER@TEST.COM",
-                            NormalizedUserName = "SELLER_NAME",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEgeAgFomAVkZC8mbMWMscDo/z55UzNa4DfNUGSOlMThA2y5+JxkICCpDvnPH1Tp0A==",
-                            PhoneNumberConfirmed = false,
-                            ProfileImageUrl = "",
-                            SecurityStamp = "B99E64F4-E3AC-449E-843D-5CC67A1FCAFF",
-                            TwoFactorEnabled = false,
-                            UserName = "Seller_Name"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -522,92 +395,6 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClaimType = "Permissions",
-                            ClaimValue = "product:add",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClaimType = "Permissions",
-                            ClaimValue = "product:update",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClaimType = "Permissions",
-                            ClaimValue = "product:delete",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ClaimType = "Permissions",
-                            ClaimValue = "review:add",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ClaimType = "Permissions",
-                            ClaimValue = "review:update",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ClaimType = "Permissions",
-                            ClaimValue = "review:delete",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ClaimType = "Permissions",
-                            ClaimValue = "users:read",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ClaimType = "Permissions",
-                            ClaimValue = "users:add",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ClaimType = "Permissions",
-                            ClaimValue = "users:update",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ClaimType = "Permissions",
-                            ClaimValue = "roles:read",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ClaimType = "Permissions",
-                            ClaimValue = "roles:add",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ClaimType = "Permissions",
-                            ClaimValue = "roles:update",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -668,23 +455,6 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("01957b40-a60a-7413-ae16-6c4727049ca9"),
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            UserId = new Guid("01957b40-a60b-780d-b328-f9bf9c4aa691"),
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59ed8104780")
-                        },
-                        new
-                        {
-                            UserId = new Guid("01957b40-a60b-780d-b328-f9c0cd4b0d85"),
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59f359f3426")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -806,17 +576,6 @@ namespace EShop.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EShop.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("EShop.Entities.User", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -944,8 +703,6 @@ namespace EShop.Persistence.Migrations
                     b.Navigation("Favorites");
 
                     b.Navigation("ProductReviews");
-
-                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

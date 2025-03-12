@@ -1,11 +1,19 @@
-﻿namespace EShop;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+namespace EShop;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConnectToDatabase(configuration);
-        services.AddAuthConfig();
+        services.AddAuthConfig(configuration);
+        services.AddFluentValidationConfig();
+
+        services.AddScoped<IAuthService, AuthService>();
         return services;
     }
 
@@ -18,12 +26,59 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddAuthConfig(this IServiceCollection services)
+    public static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<User, Role>()
+        services.AddIdentity<User, Role>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+            options.SignIn.RequireConfirmedEmail = true;
+            options.Password.RequiredLength = 8;
+        })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
+        services.AddHttpContextAccessor();
+
+        services.AddScoped<IJwtProvider, JwtProvider>();
+
+        services.AddOptions<JwtOptions>()
+            .BindConfiguration(JwtOptions.Name)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddOptions<MailSettings>()
+            .BindConfiguration(MailSettings.Name)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddScoped<IEmailService, EmailService>();
+
+        JwtOptions jwtSettings = configuration.GetSection(JwtOptions.Name).Get<JwtOptions>()!;
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+        return services;
+    }
+    public static IServiceCollection AddFluentValidationConfig(this IServiceCollection services)
+    {
+        services.AddFluentValidationAutoValidation()
+            .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         return services;
     }

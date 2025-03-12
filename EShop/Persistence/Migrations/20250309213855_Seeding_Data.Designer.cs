@@ -3,6 +3,7 @@ using System;
 using EShop.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EShop.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250309213855_Seeding_Data")]
+    partial class Seeding_Data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +42,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("Id", "UserId")
                         .IsUnique();
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("EShop.Entities.CartProduct", b =>
@@ -64,7 +67,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("ProductId", "CartId")
                         .IsUnique();
 
-                    b.ToTable("CartProduct", (string)null);
+                    b.ToTable("CartProduct");
                 });
 
             modelBuilder.Entity("EShop.Entities.Category", b =>
@@ -80,7 +83,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("EShop.Entities.Favorite", b =>
@@ -102,7 +105,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("UserId", "ProductId")
                         .IsUnique();
 
-                    b.ToTable("Favorites", (string)null);
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("EShop.Entities.Product", b =>
@@ -157,7 +160,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("EShop.Entities.ProductImage", b =>
@@ -177,7 +180,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage", (string)null);
+                    b.ToTable("ProductImage");
                 });
 
             modelBuilder.Entity("EShop.Entities.ProductReview", b =>
@@ -209,7 +212,7 @@ namespace EShop.Persistence.Migrations
                     b.HasIndex("UserId", "ProductId")
                         .IsUnique();
 
-                    b.ToTable("ProductReview", (string)null);
+                    b.ToTable("ProductReview");
                 });
 
             modelBuilder.Entity("EShop.Entities.RefreshToken", b =>
@@ -342,7 +345,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SoldProducts", (string)null);
+                    b.ToTable("SoldProducts");
                 });
 
             modelBuilder.Entity("EShop.Entities.SubCategory", b =>
@@ -363,7 +366,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategories", (string)null);
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("EShop.Entities.User", b =>
