@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -14,6 +15,19 @@ public static class DependencyInjection
         services.AddFluentValidationConfig();
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IProductService, ProductService>();
+
+        services.AddHttpContextAccessor();
+
+        services.AddOptions<MailSettings>()
+            .BindConfiguration(MailSettings.Name)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+
         return services;
     }
 
@@ -37,28 +51,27 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-        services.AddHttpContextAccessor();
+        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
-        services.AddScoped<IJwtProvider, JwtProvider>();
+
+        services.AddSingleton<IJwtProvider, JwtProvider>();
 
         services.AddOptions<JwtOptions>()
             .BindConfiguration(JwtOptions.Name)
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddOptions<MailSettings>()
-            .BindConfiguration(MailSettings.Name)
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
-
-        services.AddScoped<IEmailService, EmailService>();
 
         JwtOptions jwtSettings = configuration.GetSection(JwtOptions.Name).Get<JwtOptions>()!;
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {

@@ -1,5 +1,4 @@
 using EShop;
-using Scalar;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

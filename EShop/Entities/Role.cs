@@ -7,5 +7,5 @@ public class Role : IdentityRole<Guid>
         Id = Guid.CreateVersion7();
     }
     public bool IsDefault { get; set; }
-    public bool IsDeleted { get; set; }
+    public bool IsDisabled { get; set; }
 }

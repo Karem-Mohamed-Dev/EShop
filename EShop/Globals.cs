@@ -19,3 +19,4 @@ global using EShop.Entities;
 global using EShop.Errors;
 global using EShop.Persistence;
 global using EShop.Services;
+global using EShop.Contracts.Role;
