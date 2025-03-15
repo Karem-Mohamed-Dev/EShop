@@ -1,7 +1,4 @@
-﻿
-using Mapster;
-
-namespace EShop.Services;
+﻿namespace EShop.Services;
 
 public class CategoryService(AppDbContext context) : ICategoryService
 {
@@ -14,12 +11,9 @@ public class CategoryService(AppDbContext context) : ICategoryService
             .ProjectToType<CategoryResponse>()
             .ToListAsync(cancellationToken);
 
-    public async Task<Result<CategoryResponse>> GetAsync(string id, CancellationToken cancellationToken = default)
-    {
-        if(!Guid.TryParse(id, out var categoryId))
-            return Result.Failure<CategoryResponse>(CategoryErrors.NotFound);
-        
-        if(await _context.Categories.FindAsync(categoryId, cancellationToken) is not { } category)
+    public async Task<Result<CategoryResponse>> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    {        
+        if(await _context.Categories.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } category)
             return Result.Failure<CategoryResponse>(CategoryErrors.NotFound);
 
         return Result.Success(category.Adapt<CategoryResponse>());
@@ -38,15 +32,12 @@ public class CategoryService(AppDbContext context) : ICategoryService
         return Result.Success(category.Adapt<CategoryResponse>());
     }
 
-    public async Task<Result> UpdateAsync(string id, CategoryRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result> UpdateAsync(Guid id, CategoryRequest request, CancellationToken cancellationToken = default)
     {
-        if (!Guid.TryParse(id, out var categoryId))
+        if (await _context.Categories.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } category)
             return Result.Failure<CategoryResponse>(CategoryErrors.NotFound);
 
-        if (await _context.Categories.FindAsync(categoryId, cancellationToken) is not { } category)
-            return Result.Failure<CategoryResponse>(CategoryErrors.NotFound);
-
-        if (await _context.Categories.AnyAsync(x => x.Name == request.Name && x.Id.ToString() != id, cancellationToken))
+        if (await _context.Categories.AnyAsync(x => x.Name == request.Name && x.Id != id, cancellationToken))
             return Result.Failure<CategoryResponse>(CategoryErrors.DuplicateCategory);
 
         if(category.Name != request.Name)
@@ -58,12 +49,9 @@ public class CategoryService(AppDbContext context) : ICategoryService
         return Result.Success();
     }
 
-    public async Task<Result> ToggleDisableAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Result> ToggleDisableAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        if (!Guid.TryParse(id, out var categoryId))
-            return Result.Failure<CategoryResponse>(CategoryErrors.NotFound);
-
-        if (await _context.Categories.FindAsync(categoryId, cancellationToken) is not { } category)
+        if (await _context.Categories.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } category)
             return Result.Failure<CategoryResponse>(CategoryErrors.NotFound);
 
         category.IsDisabled = !category.IsDisabled;

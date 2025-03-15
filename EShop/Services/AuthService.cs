@@ -1,5 +1,4 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Cryptography;
 
 namespace EShop.Services;

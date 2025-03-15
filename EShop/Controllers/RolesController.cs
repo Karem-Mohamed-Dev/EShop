@@ -17,7 +17,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
 
     [HttpGet("{id}")]
     [HasPermission(Permissions.GetRoles)]
-    public async Task<IActionResult> Get([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _roleService.GetAsync(id, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
@@ -33,7 +33,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
 
     [HttpPut("{id}")]
     [HasPermission(Permissions.UpdateRoles)]
-    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] RoleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] RoleRequest request, CancellationToken cancellationToken)
     {
         var result = await _roleService.UpdateAsync(id, request, cancellationToken);
         return result.IsSuccess ? NoContent() : result.ToProblem();
@@ -41,7 +41,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
 
     [HttpPut("{id}/toggle-status")]
     [HasPermission(Permissions.ToggleRoleStatus)]
-    public async Task<IActionResult> ToggleDisable([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> ToggleDisable([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _roleService.ToggleDisableAsync(id, cancellationToken);
         return result.IsSuccess ? NoContent() : result.ToProblem();

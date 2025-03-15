@@ -1,6 +1,4 @@
-﻿using Mapster;
-
-namespace EShop.Services;
+﻿namespace EShop.Services;
 
 public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : IRoleService
 {
@@ -14,9 +12,9 @@ public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : 
         .ProjectToType<RoleResponse>()
         .ToListAsync(cancellationToken);
 
-    public async Task<Result<RoleDetailsResponse>> GetAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Result<RoleDetailsResponse>> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        if (await _roleManager.FindByIdAsync(id) is not { } role)
+        if (await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } role)
             return Result.Failure<RoleDetailsResponse>(RoleErrors.NotFound);
 
         IEnumerable<string> permissions = (await _roleManager.GetClaimsAsync(role)).Select(x => x.Value);
@@ -49,19 +47,19 @@ public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : 
             await _context.RoleClaims.AddRangeAsync(permissions, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(new RoleDetailsResponse(role.Id.ToString(), role.Name!, role.IsDisabled, request.Permissions));
+            return Result.Success(new RoleDetailsResponse(role.Id, role.Name!, role.IsDisabled, request.Permissions));
         }
 
-        var error = result.Errors.FirstOrDefault();
+        var error = result.Errors.First();
         return Result.Failure<RoleDetailsResponse>(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
     }
 
-    public async Task<Result> UpdateAsync(string id, RoleRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result> UpdateAsync(Guid id, RoleRequest request, CancellationToken cancellationToken = default)
     {
-        if (await _roleManager.Roles.AnyAsync(x => x.Name == request.Name && x.Id.ToString() != id, cancellationToken))
+        if (await _roleManager.Roles.AnyAsync(x => x.Name == request.Name && x.Id != id, cancellationToken))
             return Result.Failure(RoleErrors.DuplicateRole);
 
-        if (await _roleManager.FindByIdAsync(id) is not { } role)
+        if (await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } role)
             return Result.Failure(RoleErrors.NotFound);
 
         var allowedPermissions = Permissions.GetAllPermissions();
@@ -76,7 +74,7 @@ public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : 
         if (result.Succeeded)
         {
             var oldPermissions = await _context.RoleClaims
-                .Where(x => x.RoleId.ToString() == id && x.ClaimType == Permissions.Type)
+                .Where(x => x.RoleId == id && x.ClaimType == Permissions.Type)
                 .Select(x => x.ClaimValue)
                 .ToListAsync(cancellationToken);
 
@@ -84,12 +82,12 @@ public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : 
             {
                 ClaimType = Permissions.Type,
                 ClaimValue = x,
-                RoleId = Guid.Parse(id)
+                RoleId = id
             });
 
             var deletedPermissions = oldPermissions.Except(request.Permissions);
             await _context.RoleClaims
-                .Where(x => x.RoleId.ToString() == id && deletedPermissions.Contains(x.ClaimValue))
+                .Where(x => x.RoleId == id && deletedPermissions.Contains(x.ClaimValue))
                 .ExecuteDeleteAsync(cancellationToken);
 
             await _context.AddRangeAsync(newPermissions, cancellationToken);
@@ -102,9 +100,9 @@ public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : 
         return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
     }
 
-    public async Task<Result> ToggleDisableAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Result> ToggleDisableAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        if(await _roleManager.FindByIdAsync(id) is not { } role)
+        if(await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } role)
             return Result.Failure(RoleErrors.NotFound);
 
         role.IsDisabled = !role.IsDisabled;

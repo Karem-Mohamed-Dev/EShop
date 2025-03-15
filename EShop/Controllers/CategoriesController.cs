@@ -16,9 +16,9 @@ public class CategoriesController(ICategoryService categoryService) : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _categoryService.GetAsync(id.ToString(), cancellationToken);
+        var result = await _categoryService.GetAsync(id, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
 
@@ -32,7 +32,7 @@ public class CategoriesController(ICategoryService categoryService) : Controller
 
     [HttpPut("{id}")]
     [HasPermission(Permissions.UpdateCategory)]
-    public async Task<IActionResult> Update([FromRoute] string id, [FromBody] CategoryRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CategoryRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.UpdateAsync(id, request, cancellationToken);
         return result.IsSuccess ? NoContent() : result.ToProblem();
@@ -40,7 +40,7 @@ public class CategoriesController(ICategoryService categoryService) : Controller
 
     [HttpPut("{id}/toggle-status")]
     [HasPermission(Permissions.ToggleCategoryStatus)]
-    public async Task<IActionResult> ToggleStatus([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> ToggleStatus([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _categoryService.ToggleDisableAsync(id, cancellationToken);
         return result.IsSuccess ? NoContent() : result.ToProblem();
