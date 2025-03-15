@@ -24,6 +24,11 @@ public static class Permissions
     public const string UpdateRoles = "roles:update";
     public const string ToggleRoleStatus = "roles:togglestatus";
 
+
+    public const string AddCategory = "categories:add";
+    public const string UpdateCategory = "categories:update";
+    public const string ToggleCategoryStatus = "categories:togglestatus";
+
     public static IList<string?> GetAllPermissions() => 
         typeof(Permissions).GetFields().Select(x => x.GetValue(x) as string).ToList();
 }

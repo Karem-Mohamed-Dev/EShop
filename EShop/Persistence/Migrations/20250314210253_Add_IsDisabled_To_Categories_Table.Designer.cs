@@ -3,6 +3,7 @@ using System;
 using EShop.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EShop.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250314210253_Add_IsDisabled_To_Categories_Table")]
+    partial class Add_IsDisabled_To_Categories_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -616,27 +619,6 @@ namespace EShop.Persistence.Migrations
                             Id = 13,
                             ClaimType = "Permissions",
                             ClaimValue = "roles:togglestatus",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 14,
-                            ClaimType = "Permissions",
-                            ClaimValue = "categories:add",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 15,
-                            ClaimType = "Permissions",
-                            ClaimValue = "categories:update",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 16,
-                            ClaimType = "Permissions",
-                            ClaimValue = "categories:togglestatus",
                             RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
                         });
                 });
