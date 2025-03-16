@@ -7,6 +7,7 @@ public class ProductReview
     public Guid ProductId { get; set; }
     public string? Comment { get; set; }
     public decimal Rate { get; set; }
+    public bool IsDisabled { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public User User { get; set; } = default!;
