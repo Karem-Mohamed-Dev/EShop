@@ -18,9 +18,9 @@ namespace EShop.Persistence.Migrations
                 columns: new[] { "Id", "ClaimType", "ClaimValue", "RoleId" },
                 values: new object[,]
                 {
-                    { 18, "Permissions", "categories:add", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
-                    { 19, "Permissions", "categories:update", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
-                    { 20, "Permissions", "categories:togglestatus", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") }
+                    { 14, "Permissions", "categories:add", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
+                    { 15, "Permissions", "categories:update", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
+                    { 16, "Permissions", "categories:togglestatus", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") }
                 });
         }
 
@@ -30,17 +30,17 @@ namespace EShop.Persistence.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoleClaims",
                 keyColumn: "Id",
-                keyValue: 18);
+                keyValue: 14);
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoleClaims",
                 keyColumn: "Id",
-                keyValue: 19);
+                keyValue: 15);
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoleClaims",
                 keyColumn: "Id",
-                keyValue: 20);
+                keyValue: 16);
         }
     }
 }

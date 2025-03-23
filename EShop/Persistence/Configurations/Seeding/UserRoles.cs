@@ -15,11 +15,5 @@ public class UserRoles : IEntityTypeConfiguration<IdentityUserRole<Guid>>
             UserId = Guid.Parse(DefaultUsers.Client.Id),
             RoleId = Guid.Parse(DefaultRoles.Client.Id),
         });
-
-        builder.HasData(new IdentityUserRole<Guid>
-        {
-            UserId = Guid.Parse(DefaultUsers.Seller.Id),
-            RoleId = Guid.Parse(DefaultRoles.Seller.Id),
-        });
     }
 }

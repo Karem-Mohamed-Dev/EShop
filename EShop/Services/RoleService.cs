@@ -1,4 +1,6 @@
-﻿namespace EShop.Services;
+﻿using EShop.Persistence.Configurations.Seeding;
+
+namespace EShop.Services;
 
 public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : IRoleService
 {
@@ -102,11 +104,52 @@ public class RoleService(RoleManager<Role> roleManager, AppDbContext context) : 
 
     public async Task<Result> ToggleDisableAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        if(await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } role)
+        if (await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) is not { } role)
             return Result.Failure(RoleErrors.NotFound);
 
         role.IsDisabled = !role.IsDisabled;
         await _roleManager.UpdateAsync(role);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> AssignUserRoleAsync(UserRoleRequest request, CancellationToken cancellationToken = default)
+    {
+        Guid UserId = Guid.Parse(request.UserId);
+        Guid RoleId = Guid.Parse(request.RoleId);
+
+        if (!await _roleManager.Roles.AnyAsync(x => x.Id == RoleId, cancellationToken))
+            return Result.Failure(RoleErrors.NotFound);
+
+        if (!await _context.Users.AnyAsync(x => x.Id == UserId, cancellationToken))
+            return Result.Failure(UserErrors.NotFound);
+
+        if (await _context.UserRoles.AnyAsync(x => x.RoleId == RoleId && x.UserId == UserId, cancellationToken))
+            return Result.Failure(RoleErrors.DuplicateRoleAssign);
+
+        var userRole = new IdentityUserRole<Guid> { UserId = UserId , RoleId  = RoleId };
+        await _context.AddAsync(userRole, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> RemoveUserRoleAsync(UserRoleRequest request, CancellationToken cancellationToken = default)
+    {
+        Guid UserId = Guid.Parse(request.UserId);
+        Guid RoleId = Guid.Parse(request.RoleId);
+
+        if (!await _roleManager.Roles.AnyAsync(x => x.Id == RoleId, cancellationToken))
+            return Result.Failure(RoleErrors.NotFound);
+
+        if (!await _context.Users.AnyAsync(x => x.Id == UserId, cancellationToken))
+            return Result.Failure(UserErrors.NotFound);
+
+        if (await _context.UserRoles.FirstOrDefaultAsync(x => x.RoleId == RoleId && x.UserId == UserId, cancellationToken) is not { } userRole)
+            return Result.Failure(RoleErrors.UserRoleNotFound);
+
+        _context.UserRoles.Remove(userRole);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

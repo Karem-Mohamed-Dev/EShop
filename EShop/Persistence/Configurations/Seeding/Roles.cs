@@ -20,13 +20,5 @@ public class Roles : IEntityTypeConfiguration<Role>
             NormalizedName = DefaultRoles.Client.Name.ToUpper(),
             IsDefault = true
         });
-
-        builder.HasData(new Role
-        {
-            Id = Guid.Parse(DefaultRoles.Seller.Id),
-            Name = DefaultRoles.Seller.Name,
-            ConcurrencyStamp = DefaultRoles.Seller.ConcurrencyStamp,
-            NormalizedName = DefaultRoles.Seller.Name.ToUpper()
-        });
     }
 }

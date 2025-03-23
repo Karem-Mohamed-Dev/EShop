@@ -46,4 +46,20 @@ public class RolesController(IRoleService roleService) : ControllerBase
         var result = await _roleService.ToggleDisableAsync(id, cancellationToken);
         return result.IsSuccess ? NoContent() : result.ToProblem();
     }
+
+    [HttpPost("assign-user-role")]
+    [HasPermission(Permissions.AssignUserRole)]
+    public async Task<IActionResult> AssignUserRole([FromBody] UserRoleRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _roleService.AssignUserRoleAsync(request, cancellationToken);
+        return result.IsSuccess ? NoContent() : result.ToProblem();
+    }
+
+    [HttpPost("remove-user-role")]
+    [HasPermission(Permissions.RemoveUserRole)]
+    public async Task<IActionResult> RemoveUserRole([FromBody] UserRoleRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _roleService.RemoveUserRoleAsync(request, cancellationToken);
+        return result.IsSuccess ? NoContent() : result.ToProblem();
+    }
 }

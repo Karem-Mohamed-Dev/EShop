@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using MapsterMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace EShop;
 
@@ -10,15 +9,17 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddFluentValidationConfig();
         services.ConnectToDatabase(configuration);
         services.AddAuthConfig(configuration);
-        services.AddFluentValidationConfig();
+        services.AddMapsterConfig();
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<ISubCategoryService, SubCategoryService>();
+        services.AddScoped<IProductService, ProductService>();
 
         services.AddHttpContextAccessor();
 
@@ -30,7 +31,6 @@ public static class DependencyInjection
 
         return services;
     }
-
     public static IServiceCollection ConnectToDatabase(this IServiceCollection services, IConfiguration configuration)
     {
         string connectionString = configuration.GetConnectionString("Default") ??
@@ -39,7 +39,6 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
         return services;
     }
-
     public static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity<User, Role>(options =>
@@ -93,6 +92,14 @@ public static class DependencyInjection
         services.AddFluentValidationAutoValidation()
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+        return services;
+    }
+    public static IServiceCollection AddMapsterConfig(this IServiceCollection services)
+    {
+        var mappingConfig = TypeAdapterConfig.GlobalSettings;
+        mappingConfig.Scan(Assembly.GetExecutingAssembly());
+
+        services.AddSingleton<IMapper>(new Mapper(mappingConfig));
         return services;
     }
 }

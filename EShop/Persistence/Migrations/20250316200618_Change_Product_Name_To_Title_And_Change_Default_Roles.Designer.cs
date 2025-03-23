@@ -3,6 +3,7 @@ using System;
 using EShop.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EShop.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250316200618_Change_Product_Name_To_Title_And_Change_Default_Roles")]
+    partial class Change_Product_Name_To_Title_And_Change_Default_Roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -183,7 +186,7 @@ namespace EShop.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImage");
                 });
 
             modelBuilder.Entity("EShop.Entities.ProductReview", b =>
@@ -610,54 +613,40 @@ namespace EShop.Persistence.Migrations
                         {
                             Id = 15,
                             ClaimType = "Permissions",
-                            ClaimValue = "roles:assignuserrole",
+                            ClaimValue = "categories:add",
                             RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
                         },
                         new
                         {
                             Id = 16,
                             ClaimType = "Permissions",
-                            ClaimValue = "roles:removeuserrole",
+                            ClaimValue = "categories:update",
                             RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
                         },
                         new
                         {
                             Id = 17,
                             ClaimType = "Permissions",
-                            ClaimValue = "categories:add",
+                            ClaimValue = "categories:togglestatus",
                             RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
                         },
                         new
                         {
                             Id = 18,
                             ClaimType = "Permissions",
-                            ClaimValue = "categories:update",
+                            ClaimValue = "subcategories:add",
                             RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
                         },
                         new
                         {
                             Id = 19,
                             ClaimType = "Permissions",
-                            ClaimValue = "categories:togglestatus",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 20,
-                            ClaimType = "Permissions",
-                            ClaimValue = "subcategories:add",
-                            RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
-                        },
-                        new
-                        {
-                            Id = 21,
-                            ClaimType = "Permissions",
                             ClaimValue = "subcategories:update",
                             RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")
                         },
                         new
                         {
-                            Id = 22,
+                            Id = 20,
                             ClaimType = "Permissions",
                             ClaimValue = "subcategories:togglestatus",
                             RoleId = new Guid("01957b56-0791-7fb2-846a-d59db7d302f8")

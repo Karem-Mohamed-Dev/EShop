@@ -31,19 +31,5 @@ public class Users : IEntityTypeConfiguration<User>
             SecurityStamp = DefaultUsers.Client.SecurityStamp,
             CreatedAt = DateTime.Parse("2025-03-09 23:38:54.579194+02")
         });
-
-        builder.HasData(new User
-        {
-            Id = Guid.Parse(DefaultUsers.Seller.Id),
-            UserName = "Seller_Name",
-            NormalizedUserName = "Seller_Name".ToUpper(),
-            Email = DefaultUsers.Seller.Email,
-            NormalizedEmail = DefaultUsers.Seller.Email.ToUpper(),
-            EmailConfirmed = true,
-            PasswordHash = DefaultUsers.Seller.PasswordHash,
-            ConcurrencyStamp = DefaultUsers.Seller.ConcurrencyStamp,
-            SecurityStamp = DefaultUsers.Seller.SecurityStamp,
-            CreatedAt = DateTime.Parse("2025-03-09 23:38:54.579194+02")
-        });
     }
 }

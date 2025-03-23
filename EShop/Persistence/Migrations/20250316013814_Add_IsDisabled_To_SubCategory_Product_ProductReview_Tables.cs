@@ -39,9 +39,9 @@ namespace EShop.Persistence.Migrations
                 columns: new[] { "Id", "ClaimType", "ClaimValue", "RoleId" },
                 values: new object[,]
                 {
-                    { 22, "Permissions", "subcategories:add", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
-                    { 23, "Permissions", "subcategories:update", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
-                    { 24, "Permissions", "subcategories:togglestatus", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") }
+                    { 17, "Permissions", "subcategories:add", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
+                    { 18, "Permissions", "subcategories:update", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") },
+                    { 19, "Permissions", "subcategories:togglestatus", new Guid("01957b56-0791-7fb2-846a-d59db7d302f8") }
                 });
         }
 
@@ -51,17 +51,17 @@ namespace EShop.Persistence.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoleClaims",
                 keyColumn: "Id",
-                keyValue: 22);
+                keyValue: 17);
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoleClaims",
                 keyColumn: "Id",
-                keyValue: 23);
+                keyValue: 18);
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoleClaims",
                 keyColumn: "Id",
-                keyValue: 24);
+                keyValue: 19);
 
             migrationBuilder.DropColumn(
                 name: "IsDisabled",

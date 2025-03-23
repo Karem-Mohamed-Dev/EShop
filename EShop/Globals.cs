@@ -24,3 +24,4 @@ global using EShop.Services;
 global using EShop.Contracts.Role;
 global using EShop.Contracts.Category;
 global using EShop.Contracts.SubCategory;
+global using EShop.Contracts.Product;

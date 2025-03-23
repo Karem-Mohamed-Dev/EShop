@@ -7,7 +7,7 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.Property(x => x.Description).HasMaxLength(300);
-        builder.Property(x => x.Name).HasMaxLength(100);
+        builder.Property(x => x.Title).HasMaxLength(100);
         builder.Property(x => x.Rate).HasColumnType("decimal(2,1)");
         builder.Property(x => x.Price).HasColumnType("decimal(7,2)");
 
@@ -20,5 +20,9 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
             .WithMany(x => x.Products)
             .HasForeignKey(x => x.SubCategoryId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasMany(x => x.Images)
+            .WithOne(x => x.Product)
+            .HasForeignKey(x => x.ProductId);
     }
 }

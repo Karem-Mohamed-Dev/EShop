@@ -12,6 +12,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Favorite> Favorites { get; set; }
     public DbSet<SoldProduct> SoldProducts { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
